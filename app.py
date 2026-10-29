@@ -1,6 +1,6 @@
 """Dashboard - Acidentes nas Rodovias Federais (PRF, jan-ago/2026).
 
-Atividade #3 - Análise e Visualização de Dados (CESAR School)
+Atividade - Análise e Visualização de Dados (CESAR School)
 Aluno: Edgleyson Pereira da Silva
 
 Para rodar localmente:  streamlit run app.py
@@ -70,7 +70,7 @@ dff = filtrar(df, periodo, ufs, pistas)
 st.image(str(BANNER_IMG))  # figura fixa que ilustra o dashboard
 
 st.markdown(
-    "Painel construído a partir dos insights das Atividades 1 e 2: **o horário com mais acidentes "
+    "Painel construído a partir de análises exploratórias e explanatórias: **o horário com mais acidentes "
     "não é o mais letal** e **os tipos de acidente mais frequentes não são os que mais matam**. "
     "Use os filtros da barra lateral para explorar os dados."
 )
