@@ -178,28 +178,37 @@ def barras_ranking(tabela, metrica, media, top=None):
         category_orders={"rotulo": list(dados["rotulo"]), "grupo": [GRUPO_CRITICO, GRUPO_DEMAIS]},
         custom_data=[categoria, "acidentes", "mortos", "letalidade"],
     )
-    fig.update_traces(
-        textposition="outside",
-        cliponaxis=False,
-        textfont=dict(color=AZUL_1),
+        fig.update_traces(
         marker_cornerradius=4,
         hovertemplate=("<b>%{customdata[0]}</b><br>%{customdata[1]:,} acidentes"
                        "<br>%{customdata[2]:,} mortos<br>%{customdata[3]:.1f}% com morte<extra></extra>"),
     )
-    if metrica == "letalidade":
-        fig.add_vline(x=media, line=dict(color=AZUL_3, width=1.2, dash="dash"), layer="below",
-                      annotation_text=f"média {fmt_pct(media)}", annotation_position="bottom right",
-                      annotation_font=dict(color=AZUL_3, size=12))
 
-    # o px.bar horizontal já desenha a 1ª categoria do category_orders no topo
-    fig.update_xaxes(visible=False, range=[0, max(dados[metrica].max() * 1.22, 1)])
+    limite_x = max(dados[metrica].max() * 1.22, 1)
+
+    # valores numa coluna fixa à direita (longe da linha da média)
+    for _, linha in dados.iterrows():
+        fig.add_annotation(x=limite_x, y=linha["rotulo"], text=linha["texto"],
+                           xref="x", yref="y", xanchor="right", showarrow=False,
+                           font=dict(color=AZUL_1, size=12))
+
+    if metrica == "letalidade":
+        fig.add_vline(x=media, line=dict(color=AZUL_3, width=1.2, dash="dash"), layer="below")
+        # rótulo acima do gráfico, fora da área das barras
+        fig.add_annotation(x=media, y=1, xref="x", yref="paper", yanchor="bottom",
+                           text=f"média {fmt_pct(media)}", showarrow=False,
+                           font=dict(color=AZUL_3, size=12))
+
+    fig.update_xaxes(visible=False, range=[0, limite_x])
     fig.update_yaxes(title=None)
     fig.update_layout(
         bargap=0.35,
         showlegend=bool(dados["grupo"].nunique() > 1),
-        legend=dict(title=None, orientation="h", x=0, y=1.0, yanchor="bottom"),
+        legend=dict(title=None, orientation="h", x=0, y=1.1, yanchor="bottom"),
     )
-    return _estilo_base(fig, 100 + 28 * len(dados), margem_baixo=30)
+    fig = _estilo_base(fig, 100 + 28 * len(dados), margem_baixo=30)
+    fig.update_layout(margin=dict(t=70))  # espaço para legenda + rótulo da média
+    return fig
 
 
 def mapa_densidade(df, so_com_morte=False):
