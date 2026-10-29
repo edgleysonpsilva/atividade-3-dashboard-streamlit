@@ -178,7 +178,7 @@ def barras_ranking(tabela, metrica, media, top=None):
         category_orders={"rotulo": list(dados["rotulo"]), "grupo": [GRUPO_CRITICO, GRUPO_DEMAIS]},
         custom_data=[categoria, "acidentes", "mortos", "letalidade"],
     )
-        fig.update_traces(
+    fig.update_traces(
         marker_cornerradius=4,
         hovertemplate=("<b>%{customdata[0]}</b><br>%{customdata[1]:,} acidentes"
                        "<br>%{customdata[2]:,} mortos<br>%{customdata[3]:.1f}% com morte<extra></extra>"),
